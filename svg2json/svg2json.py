@@ -30,7 +30,7 @@ from scour.scour import scourString
 from scour.scour import sanitizeOptions as sanitizeScourOptions
 from scour.scour import parse_args as parseScourArgs
 
-VERSION = "0.1.0"
+VERSION = "0.1.2"
 
 
 def Optimize(sourcesvg):

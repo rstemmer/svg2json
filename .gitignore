@@ -4,4 +4,7 @@
 *.swp
 *.swo
 tmp/*
+build/*
+dist/*
+svg2json.egg-info
 
