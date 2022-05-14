@@ -18,6 +18,9 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+import argparse
+from pathlib import Path
+
 import base64
 import json
 
@@ -57,8 +60,9 @@ def MakeDataURI(data, mediatype="image/svg+xml", encoding="base64"):
     return uri
 
 
-def main():
-    with open("LineTest.svg") as fd:
+def SVGFileToDataURI(svgpath):
+    # TODO: Catch exception when not existing
+    with open(svgpath) as fd:
         sourcesvg = fd.read()
 
     optimizedsvg = Optimize(sourcesvg)
@@ -67,11 +71,47 @@ def main():
     print(encodedsvg)
     datauri      = MakeDataURI(encodedsvg)
     print(datauri)
-    svgmap       = list()
-    svgmap.append({"LineTest": datauri})
-    jsonstring   = json.dumps(svgmap)
-    print(jsonstring)
+    return datauri
 
+
+def GetSVGNameFromPath(path):
+    file = Path(path.name)  # Get full file name from path
+    name = file.stem        # Get only the name without suffix
+    return str(name)
+
+
+def main():
+    argparser = argparse.ArgumentParser(description="Consolidate svg files into a single json file")
+    argparser.add_argument("-v", "--version", action="store_true", help="show version and exit.")
+    argparser.add_argument("svgpaths", metavar="svgpath", type=str, nargs="+", help="A set of SVG files to collect.")
+    argparser.add_argument("-o", "--output", metavar="jsonpath", type=str, help="Path to store the JSON file. If not given, it will be printed to stdout.")
+
+    # Parse command line arguments
+    args = argparser.parse_args()
+
+    if args.version:
+        print(VERSION)
+        exit(0)
+
+    svgpaths = args.svgpaths
+    jsonpath = args.output
+
+    # Process SVG files
+    svgmap = list()
+    for svgpath in svgpaths:
+        svgpath = Path(svgpath)
+        datauri = SVGFileToDataURI(svgpath)
+        svgname = GetSVGNameFromPath(svgpath)
+        svgmap.append({svgname: datauri})
+
+    # Create outpup
+    jsonstring   = json.dumps(svgmap)
+    jsonstring  += "\n" # I like line breaks at the end of a file
+    if jsonpath:
+        with open(jsonpath, "w") as fd:
+            fd.write(jsonstring)
+    else:
+        print(jsonstring)
 
 if __name__ == "__main__":
     main()
