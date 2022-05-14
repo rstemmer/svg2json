@@ -19,6 +19,7 @@
 #   limitations under the License.
 
 import base64
+import json
 
 # Load Scour for SVG optimization
 from scour.scour import scourString
@@ -47,7 +48,7 @@ def Base64Encode(sourcesvg):
     return base64string
 
 
-def MakeDataURI(data, mediatype="svg+xml", encoding="base64"):
+def MakeDataURI(data, mediatype="image/svg+xml", encoding="base64"):
     uri  = "data:"
     uri += mediatype
     if type(encoding) is str:
@@ -66,6 +67,10 @@ def main():
     print(encodedsvg)
     datauri      = MakeDataURI(encodedsvg)
     print(datauri)
+    svgmap       = list()
+    svgmap.append({"LineTest": datauri})
+    jsonstring   = json.dumps(svgmap)
+    print(jsonstring)
 
 
 if __name__ == "__main__":
