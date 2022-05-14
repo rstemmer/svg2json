@@ -35,3 +35,11 @@ svg2json -o iconset.json iconset/*.svg
 svg2json good.svg bad.svg > status.json
 ```
 
+Example of a generated JSON file:
+```json
+{
+    "SVG a": "data:image/svg+xml;base64,<data>",
+    "SVG b": "data:image/svg+xml;base64,<data>"
+}
+```
+

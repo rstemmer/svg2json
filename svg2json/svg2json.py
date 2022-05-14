@@ -30,7 +30,7 @@ from scour.scour import scourString
 from scour.scour import sanitizeOptions as sanitizeScourOptions
 from scour.scour import parse_args as parseScourArgs
 
-VERSION = "0.1.2"
+VERSION = "0.1.3"
 
 
 def Optimize(sourcesvg):
@@ -98,12 +98,12 @@ def main():
     jsonpath = args.output
 
     # Process SVG files
-    svgmap = list()
+    svgmap = dict()
     for svgpath in svgpaths:
         svgpath = Path(svgpath)
         datauri = SVGFileToDataURI(svgpath)
         svgname = GetSVGNameFromPath(svgpath)
-        svgmap.append({svgname: datauri})
+        svgmap[svgname] = datauri
 
     # Create outpup
     jsonstring   = json.dumps(svgmap)
