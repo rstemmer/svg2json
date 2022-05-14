@@ -2,7 +2,7 @@
 
 Collects a set of svg vector graphics into a single json file using data URIs
 
-**This project is in a very early experimental stage!**
+**This project is currently in alpha stage**
 
 ## Dependencies
 
@@ -19,5 +19,19 @@ Collects a set of svg vector graphics into a single json file using data URIs
 ```bash
 cd dist
 sudo pip install --upgrade svg2json-0.1.0-py3-none-any.whl
+```
+
+## Usage
+
+```bash
+svg2json --help
+```
+
+```bash
+svg2json -o iconset.json iconset/*.svg
+```
+
+```bash
+svg2json good.svg bad.svg > status.json
 ```
 
