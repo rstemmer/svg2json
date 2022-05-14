@@ -30,7 +30,7 @@ from scour.scour import scourString
 from scour.scour import sanitizeOptions as sanitizeScourOptions
 from scour.scour import parse_args as parseScourArgs
 
-VERSION = "0.1.3"
+VERSION = "0.1.4"
 
 
 def Optimize(sourcesvg):
@@ -42,7 +42,17 @@ def Optimize(sourcesvg):
         "--no-line-breaks"])
     scouroptions = sanitizeScourOptions(scouroptions)
     optimizedsvg = scourString(sourcesvg, scouroptions)
-    return optimizedsvg
+
+    # Currently Scour's --indent and --no-line-breaks does not work
+    # So I do this myself :)
+    reducedsvg = []
+    for line in optimizedsvg.split("\n"):
+        line = line.strip()
+        if len(line) > 0:
+            reducedsvg.append(line)
+
+    return "".join(reducedsvg)
+    #return optimizedsvg
 
 
 def Base64Encode(sourcesvg):
