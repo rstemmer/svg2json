@@ -18,6 +18,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+import sys
 import argparse
 from pathlib import Path
 
@@ -29,7 +30,7 @@ from scour.scour import scourString
 from scour.scour import sanitizeOptions as sanitizeScourOptions
 from scour.scour import parse_args as parseScourArgs
 
-VERSION = "0.0.1"
+VERSION = "0.1.0"
 
 
 def Optimize(sourcesvg):
@@ -61,16 +62,16 @@ def MakeDataURI(data, mediatype="image/svg+xml", encoding="base64"):
 
 
 def SVGFileToDataURI(svgpath):
-    # TODO: Catch exception when not existing
-    with open(svgpath) as fd:
-        sourcesvg = fd.read()
+    try:
+        with open(svgpath) as fd:
+            sourcesvg = fd.read()
+    except FileNotFoundError:
+        print("Path %s not found. SVG will be skipped!"%(str(svgpath)), file=sys.stderr)
+        return None
 
     optimizedsvg = Optimize(sourcesvg)
-    print(optimizedsvg)
     encodedsvg   = Base64Encode(optimizedsvg)
-    print(encodedsvg)
     datauri      = MakeDataURI(encodedsvg)
-    print(datauri)
     return datauri
 
 
@@ -107,11 +108,13 @@ def main():
     # Create outpup
     jsonstring   = json.dumps(svgmap)
     jsonstring  += "\n" # I like line breaks at the end of a file
+
     if jsonpath:
         with open(jsonpath, "w") as fd:
             fd.write(jsonstring)
     else:
         print(jsonstring)
+
 
 if __name__ == "__main__":
     main()
