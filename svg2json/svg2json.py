@@ -18,6 +18,9 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+import base64
+
+# Load Scour for SVG optimization
 from scour.scour import scourString
 from scour.scour import sanitizeOptions as sanitizeScourOptions
 from scour.scour import parse_args as parseScourArgs
@@ -37,12 +40,32 @@ def Optimize(sourcesvg):
     return optimizedsvg
 
 
+def Base64Encode(sourcesvg):
+    utf8code     = sourcesvg.encode("UTF-8")
+    base64code   = base64.b64encode(utf8code)
+    base64string = base64code.decode("UTF-8")
+    return base64string
+
+
+def MakeDataURI(data, mediatype="svg+xml", encoding="base64"):
+    uri  = "data:"
+    uri += mediatype
+    if type(encoding) is str:
+        uri += ";" + encoding
+    uri += "," + data
+    return uri
+
+
 def main():
     with open("LineTest.svg") as fd:
         sourcesvg = fd.read()
 
     optimizedsvg = Optimize(sourcesvg)
     print(optimizedsvg)
+    encodedsvg   = Base64Encode(optimizedsvg)
+    print(encodedsvg)
+    datauri      = MakeDataURI(encodedsvg)
+    print(datauri)
 
 
 if __name__ == "__main__":
