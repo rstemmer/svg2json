@@ -43,7 +43,7 @@ setuptools.setup(
             "Intended Audience :: Developers",
             "Intended Audience :: Science/Research",
             "Topic :: Internet",
-            "Topic :: Multimedia :: Graphics :: Graphics Conversion"
+            "Topic :: Multimedia :: Graphics :: Graphics Conversion",
             "Topic :: Software Development :: Build Tools",
             "Topic :: Utilities",
             ],
